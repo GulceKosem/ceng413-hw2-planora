@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Planora is a smart study planner that turns your topics and deadline into a day-by-day schedule.">
+  <title>Planora — Smart Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <span class="logo-mark" aria-hidden="true">P</span>
+      <div>
+        <h1 class="logo-text">Planora</h1>
+        <p class="tagline">Plan Smarter. Study Better.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Study plan form -->
+    <section class="card" aria-labelledby="form-title">
+      <h2 id="form-title">Create your study plan</h2>
+      <p class="muted">Add your topics, pick a deadline, and Planora will spread the work across your days.</p>
+
+      <form id="plan-form" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="deadline">Exam or deadline date</label>
+            <input type="date" id="deadline" name="deadline" required>
+            <div class="chips" aria-label="Quick deadline">
+              <button type="button" class="chip" data-add-days="7">+1 week</button>
+              <button type="button" class="chip" data-add-days="14">+2 weeks</button>
+              <button type="button" class="chip" data-add-days="30">+1 month</button>
+              <span id="days-left" class="hint"></span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="daily-hours">Available study hours per day</label>
+            <input type="number" id="daily-hours" name="dailyHours" value="3" min="0.25" max="24" step="0.25" inputmode="decimal" required>
+          </div>
+        </div>
+
+        <fieldset class="topics">
+          <legend>Study topics</legend>
+          <ul id="topic-list" class="topic-list"></ul>
+          <button type="button" id="add-topic" class="btn btn-secondary">+ Add topic</button>
+          <p class="hint">Each day is filled in the order your topics are listed, so put the most urgent topic first.</p>
+        </fieldset>
+
+        <div id="form-error" class="alert alert-error" role="alert" hidden></div>
+
+        <div class="actions">
+          <button type="submit" id="generate" class="btn btn-primary">
+            <span class="spinner" aria-hidden="true"></span>
+            <span id="generate-label">Generate Study Plan</span>
+          </button>
+          <button type="button" id="reset-form" class="btn btn-ghost">Reset form</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Empty state (before a plan exists) -->
+    <section id="empty-state" class="card empty" aria-live="polite">
+      <h2>Your plan will appear here</h2>
+      <p class="muted">Fill in the form above and select <strong>Generate Study Plan</strong>.</p>
+    </section>
+
+    <!-- Results -->
+    <section id="results" aria-labelledby="results-title" hidden>
+      <div class="results-head">
+        <h2 id="results-title">Your study plan</h2>
+        <button type="button" id="print" class="btn btn-secondary no-print">Print / Save as PDF</button>
+      </div>
+
+      <div id="status" class="alert" role="status"></div>
+      <div id="overdue" class="alert alert-warn no-print" hidden></div>
+
+      <section class="card today-card no-print" aria-labelledby="today-title">
+        <div class="today-head">
+          <h3 id="today-title" class="section-title">Today</h3>
+          <div class="timer">
+            <label class="visually-hidden" for="timer-length">Focus length</label>
+            <select id="timer-length">
+              <option value="25">25 min</option>
+              <option value="45">45 min</option>
+              <option value="60">60 min</option>
+            </select>
+            <output id="timer-display" aria-label="Focus timer">25:00</output>
+            <button type="button" id="timer-toggle" class="btn btn-secondary">Start focus</button>
+            <button type="button" id="timer-reset" class="btn btn-ghost">Reset</button>
+          </div>
+        </div>
+        <ul id="today-list" class="today-list"></ul>
+      </section>
+
+      <h3 class="section-title">Summary</h3>
+      <dl class="summary">
+        <div class="stat"><dt>Total required</dt><dd id="sum-total">–</dd></div>
+        <div class="stat"><dt>Scheduled</dt><dd id="sum-scheduled">–</dd></div>
+        <div class="stat"><dt>Unscheduled</dt><dd id="sum-unscheduled">–</dd></div>
+        <div class="stat"><dt>Feasibility</dt><dd id="sum-feasible">–</dd></div>
+      </dl>
+
+      <div class="progress-card">
+        <div class="progress-top"><strong>Progress</strong><span id="progress-text"></span></div>
+        <progress id="progress-bar" max="100" value="0" aria-label="Study progress"></progress>
+        <ul id="legend" class="legend"></ul>
+      </div>
+
+      <div class="schedule-head">
+        <h3 class="section-title">Generated schedule</h3>
+        
+      </div>
+      <p id="schedule-meta" class="meta"></p>
+      <p class="hint no-print">Drag a session onto another day to reschedule it, or use the ‹ › buttons. Tick a session when you finish it.</p>
+      <div id="schedule" class="schedule"></div>
+      <p id="cal-live" class="visually-hidden" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer class="container site-footer no-print">
+    <p>Planora — Smart Study Planner</p>
+  </footer>
+</body>
+</html>
